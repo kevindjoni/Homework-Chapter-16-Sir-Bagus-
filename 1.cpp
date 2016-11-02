@@ -9,10 +9,16 @@ class Date
 	int year;
 	
 	const string monthN[12] = {"January", "February", "March", "April",
-							  "May", "June", "July", "August", "September",
-							  "October", "November", "December"};
+							   "May", "June", "July", "August", "September",
+							   "October", "November", "December"};
 	
 	public:
+		class wrongDay
+		{
+		};
+		class wrongMonth
+		{
+		};
 		Date(int day, int month, int year)
 		{
 			this -> day = day;
@@ -25,14 +31,12 @@ class Date
 			return day;
 		}
 		
-		int InvalidDay(int day)
+		void InvalidDay()
 		{
 			if(day < 1 || day > 31)
 			{
-				string exceptionString = "ERROR, Day must not be less than 1 or more than 31";
-				throw exceptionString;
+				throw wrongDay();
 			}
-			return day;
 		}
 		
 		int getMonth()
@@ -40,14 +44,13 @@ class Date
 			return month;
 		}
 		
-		int InvalidMonth(int month)
+		void InvalidMonth()
 		{
 			if(month < 1 || month > 12)
-			{
-				string exceptionString = "ERROR, Month must not be less than 1 or more than 12";
-				throw exceptionString;
+			{	
+				month = 1;
+				throw wrongMonth();
 			}
-			return month;
 		}
 		
 		int getYear()
@@ -86,24 +89,34 @@ int main()
 	
 	Date d(day1, month1, year1);
 	
+	cout << endl << "DISPLAY" << endl;
+	cout << "-------" << endl;
+	
 	try
+	{	
+		d.InvalidDay();	
+	}
+	catch(Date::wrongDay)
 	{
-		cout << endl << "DISPLAY" << endl;
-		cout << "-------" << endl;
-		d.InvalidDay(day1);
-		d.InvalidMonth(month1);
-		cout << "First Format" << "\t: ";
-		d.print1();
-		cout << "Second Format" << "\t: ";
-		d.print2();
-		cout << "Third Format" << "\t: ";
-		d.print3();
+		cout << "Invalid Day" << endl;	
 	}
 	
-	catch(string exceptionString)
+	try
 	{
-		cout << endl << exceptionString;
+		d.InvalidMonth();
 	}
+	catch(Date::wrongMonth)
+	{
+		cout << "Invalid Month" << endl;
+		exit(0);
+	}
+
+	cout << "First Format" << "\t: ";
+	d.print1();
+	cout << "Second Format" << "\t: ";
+	d.print2();
+	cout << "Third Format" << "\t: ";
+	d.print3();
 	
 	return 0;
 }
